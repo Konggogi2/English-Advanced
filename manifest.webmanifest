@@ -1,0 +1,18 @@
+{
+  "name": "영어 회화 로드트립",
+  "short_name": "로드트립",
+  "description": "미국·호주 숙어와 슬랭으로 배우는 중급 이상 영어 회화 여행 게임",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f8ff",
+  "theme_color": "#2f5bd7",
+  "lang": "ko",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
