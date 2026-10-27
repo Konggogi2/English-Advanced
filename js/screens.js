@@ -23,10 +23,12 @@ export function render() {
   tabsScreen(a);
 }
 
-const isUnlocked = (u) => store.s.settings.open || u.id === 1 || store.unit(u.id - 1).st[3] > 0;
+// 챕터는 자유롭게 열 수 있고, 챕터 안에서는 첫 유닛부터 순서대로 열린다.
+const isUnlocked = (u) => store.s.settings.open || CHAPTERS.some((c) => c.from === u.id) || store.unit(u.id - 1).st[3] > 0;
 const unitStars = (u) => store.unit(u.id).st.reduce((a, b) => a + (b > 0 ? 1 : 0), 0);
 const unitDone = (u) => store.unit(u.id).st[5] >= 2;
 const chUnlocked = (c) => store.s.settings.open || store.unit(c.to).st[3] > 0;
+const chProgress = (c) => UNITS.filter((u) => u.id >= c.from && u.id <= c.to && unitDone(u)).length;
 const starStr = (n) => '★'.repeat(n) + '☆'.repeat(Math.max(0, 3 - n));
 const rg = (r) => h('span', { class: 'rg ' + (r || 'ALL') }, REG[r || 'ALL']);
 
@@ -67,16 +69,17 @@ function homeTab(scr) {
   const t = todaysItem();
   const due = dueCount();
   scr.append(h('div', { class: 'mascot' }, h('div', { class: 'm' }, '🐨'), h('div', { class: 't' }, h('b', null, 'Koa · 오늘의 표현'), h('br'), rg(t.region), h('b', { style: { fontSize: '16px' } }, t.phrase), h('div', null, t.ko), h('button', { class: 'btn sm teal', style: { marginTop: '6px' }, onclick: () => speak(t.en, false, t.region) }, '🔊 ' + t.en), due > 0 ? h('div', { style: { marginTop: '6px' } }, `복습할 표현이 ${due}개 있어요 🔁`) : null)));
+  scr.append(h('div', { class: 'chnav' }, CHAPTERS.map((ch) => h('button', { class: 'chbtn', style: { borderColor: ch.color }, onclick: () => { const el = document.getElementById('ch-' + ch.id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }, h('b', null, ch.flag), h('span', null, ch.city), h('small', null, chProgress(ch) + '/' + UNITS.filter((u) => u.id >= ch.from && u.id <= ch.to).length)))));
   CHAPTERS.forEach((ch) => {
     const us = UNITS.filter((u) => u.id >= ch.from && u.id <= ch.to);
-    scr.append(h('div', { class: 'sect', style: { background: ch.color } }, h('span', null, `${ch.flag} ${ch.name}`), h('small', null, ch.sub)));
+    scr.append(h('div', { class: 'sect', id: 'ch-' + ch.id, style: { background: ch.color } }, h('span', null, `${ch.flag} ${ch.name}`), h('small', null, ch.sub)));
     scr.append(h('div', { style: { fontSize: '13px', color: 'var(--sub)', margin: '6px 4px 0', lineHeight: 1.6 } }, ch.story));
     const path = h('div', { class: 'path' });
     us.forEach((u, i) => {
       const unlocked = isUnlocked(u), st = unitStars(u);
       const off = [0, 40, 60, 40, 0][i % 5] * (Math.floor((u.id - 1) / 5) % 2 ? -1 : 1);
       const wrap = h('div', { style: { transform: `translateX(${off}px)`, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' } });
-      const node = h('button', { class: 'node' + (unitDone(u) ? ' done' : unlocked ? '' : ' lock'), onclick: () => { if (!unlocked) { toast('앞 유닛의 “스토리 대화”까지 끝내면 열려요'); return; } go('unit', { id: u.id }); } },
+      const node = h('button', { class: 'node' + (unitDone(u) ? ' done' : unlocked ? '' : ' lock'), onclick: () => { if (!unlocked) { toast('이 챕터의 앞 유닛 “스토리 대화”까지 끝내면 열려요'); return; } go('unit', { id: u.id }); } },
         unlocked ? u.emoji : '🔒', h('span', { class: 'no' }, u.id), unitDone(u) ? h('span', { class: 'crown' }, '👑') : null);
       wrap.append(node, h('div', { class: 'nlabel' }, h('b', null, u.title), unlocked ? `${st}/6 단계` : ''));
       path.append(wrap);
@@ -87,7 +90,7 @@ function homeTab(scr) {
       h('div', { class: 'nlabel' }, h('b', null, ch.city + ' 여권 스탬프'), '챕터 종합 점검')));
     scr.append(path);
   });
-  scr.append(h('div', { class: 'card', style: { textAlign: 'center', color: 'var(--sub)', fontSize: '13px' } }, '60개 유닛을 모두 마치면 미국·호주식 숙어와 슬랭까지 자연스럽게 구사하는 상급자에 가까워져요. 🌏'));
+  scr.append(h('div', { class: 'card', style: { textAlign: 'center', color: 'var(--sub)', fontSize: '13px' } }, UNITS.length + '개 유닛을 모두 마치면 미국·호주식 숙어와 슬랭, 전치사까지 자연스럽게 구사하는 상급자에 가까워져요. 🌏'));
 }
 
 // ---------- 유닛
@@ -227,7 +230,7 @@ function moreTab(scr) {
     h('div', { style: { fontSize: '12px', color: 'var(--sub)', marginTop: '8px', lineHeight: 1.6 } }, 'Android: 설정 → 일반 → 언어 및 입력 → 텍스트 음성 변환(Google) → 영어(호주·영국 등) 음성 데이터 설치.\niPhone: 설정 → 손쉬운 사용 → 말하기 콘텐츠 → 음성 → English (Australia, UK…) 다운로드.'.split('\n').map((t) => h('div', null, t)))));
   scr.append(h('div', { class: 'card' }, h('h3', null, '학습 설정'),
     h('div', { class: 'switch' }, h('span', null, '하루 목표'), (() => { const sel = h('select', { onchange: () => { s.goal = +sel.value; store.save(); } }, [30, 60, 100, 150].map((n) => h('option', { value: n, selected: s.goal === n }, n + ' XP' + (n === 30 ? ' (가볍게)' : n === 60 ? ' (보통)' : n === 100 ? ' (열심히)' : ' (집중)')))); return sel; })()),
-    h('label', { class: 'switch' }, h('span', null, '모든 유닛 열어 두기'), h('input', { type: 'checkbox', checked: s.settings.open, onchange: (e) => { s.settings.open = e.target.checked; store.save(); } })),
+    h('label', { class: 'switch' }, h('span', null, '모든 유닛 열어 두기(챕터 내 순서 잠금 해제)'), h('input', { type: 'checkbox', checked: s.settings.open, onchange: (e) => { s.settings.open = e.target.checked; store.save(); } })),
     h('div', { class: 'switch' }, h('span', null, '화면 색'), (() => { const sel = h('select', { onchange: () => { s.settings.theme = sel.value; store.save(); render(); } }, [['', '자동'], ['light', '밝게'], ['dark', '어둡게']].map(([v, t]) => h('option', { value: v, selected: s.settings.theme === v }, t))); return sel; })())));
   scr.append(h('div', { class: 'card' }, h('h3', null, '내 기록'), h('div', { style: { fontSize: '14px', lineHeight: 1.8 } }, `총 XP ${s.xp} · 최고 연속 ${s.best}일 · 완료 유닛 ${UNITS.filter(unitDone).length}/${UNITS.length} · 배운 표현 ${learnedKeys().length}`)));
   scr.append(h('button', { class: 'btn bad', onclick: () => { if (confirm('모든 진도를 지울까요? 되돌릴 수 없어요.')) { store.reset(); render(); toast('초기화했어요'); } } }, '진도 초기화'));

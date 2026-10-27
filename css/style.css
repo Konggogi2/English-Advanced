@@ -195,3 +195,8 @@ select { padding: 10px; border-radius: 10px; border: 2px solid var(--line); back
 .phr { font-size: 22px; font-weight: 800; }
 
 .fb .ans { white-space: pre-line; }
+.chnav { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 8px; margin: 4px -2px 0; -webkit-overflow-scrolling: touch; }
+.chbtn { flex: 0 0 auto; min-width: 78px; background: var(--card); color: var(--ink); border: 2px solid var(--line); border-radius: 14px; padding: 6px 8px; font: inherit; font-size: 12px; text-align: center; cursor: pointer; }
+.chbtn b { display: block; font-size: 20px; }
+.chbtn span { display: block; font-weight: 800; white-space: nowrap; }
+.chbtn small { color: var(--sub); }

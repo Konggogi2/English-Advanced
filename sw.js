@@ -1,5 +1,5 @@
 // 자동 생성 (tools/make_sw.mjs). 수정하지 마세요.
-const CACHE = 'english-vmvk5nw0t';
+const CACHE = 'english-vmvr8gfkr';
 const FILES = [
  "./",
  "./css/style.css",
@@ -16,6 +16,7 @@ const FILES = [
  "./js/data/u31_40.js",
  "./js/data/u41_50.js",
  "./js/data/u51_60.js",
+ "./js/data/u61_68.js",
  "./js/ex.js",
  "./js/gen.js",
  "./js/lesson.js",

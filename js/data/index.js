@@ -4,8 +4,9 @@ import { U21 } from './u21_30.js';
 import { U31 } from './u31_40.js';
 import { U41 } from './u41_50.js';
 import { U51 } from './u51_60.js';
+import { U61 } from './u61_68.js';
 
-export const UNITS = [...U01, ...U11, ...U21, ...U31, ...U41, ...U51];
+export const UNITS = [...U01, ...U11, ...U21, ...U31, ...U41, ...U51, ...U61];
 
 export const CHAPTERS = [
   { id: 'c1', from: 1, to: 10, flag: '🗽', city: 'New York', name: 'Chapter 1 · New York', sub: '미국 일상 회화의 기본기', color: '#2f5bd7', story: '뉴욕 JFK 공항에서 여행이 시작돼요. 친구 제이크와 함께 카페, 지하철, 파티, 사무실을 돌며 미국식 일상 표현을 익혀요.' },
@@ -14,4 +15,5 @@ export const CHAPTERS = [
   { id: 'c4', from: 31, to: 40, flag: '🦘', city: 'Melbourne', name: 'Chapter 4 · Melbourne & Beyond', sub: '아웃백 · 영국식 영어 · 구동사', color: '#8a5cd6', story: '멜버른 카페 문화에서 아웃백 사막까지. 영국식 영어와 구동사, 시간·사람 관련 숙어도 정복해요.' },
   { id: 'c5', from: 41, to: 50, flag: '🏙️', city: 'Chicago', name: 'Chapter 5 · Work & Social', sub: '비즈니스와 사회생활 영어', color: '#c0527a', story: '시카고에서 일자리를 얻은 당신! 회의, 이메일, 면접, 협상, 연애까지 사회생활 영어를 익혀요.' },
   { id: 'c6', from: 51, to: 60, flag: '🏔️', city: 'Fluency Summit', name: 'Chapter 6 · Fluency Summit', sub: '상급자의 뉘앙스와 화법', color: '#2f4f8f', story: '마지막 정상! 완곡한 표현, 아이러니, 토론, 이야기하기, 자연스러운 구어체로 원어민다운 마무리를 해요.' },
+  { id: 'c7', from: 61, to: 68, flag: '🧭', city: 'Preposition Lab', name: 'Chapter 7 · Preposition Mastery', sub: '전치사 사용 숙달 (상급자의 디테일)', color: '#0f7b8a', story: '상급자와 중급자를 가르는 마지막 디테일, 전치사! 시간·장소·형용사·동사·명사 짝과 고정 표현, 이동과 헷갈리는 쌍까지 정복해요. 이 챕터는 따로 바로 시작해도 돼요.' },
 ];
